@@ -29,8 +29,8 @@ export default function Home() {
         </div>
         <AuthForm/>
       </div>
-      // this commit also had this packages installed init -> npm install next-auth@latest @prisma/client @next-auth/prisma-adapter bcrypt
-  
+      // this commit had installation of -> npm install -D @types/bcrypt
+
     )
   }
   
