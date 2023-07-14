@@ -6,6 +6,7 @@ import AuthSocialButton from './AuthSocialButton';
 import { BsGithub , BsGoogle } from 'react-icons/bs';
 import { useCallback, useState } from "react";
 import { FieldValues , useForm , SubmitHandler} from "react-hook-form";
+import axios from "axios";
 type Varient = 'LOGIN' | 'REGISTER';
 //client based structure compo rather than a server based, has buttons, fields, more like a react compo, rather then a static html maker for a bot
 // npm install react-icons react-hook-form clsx
@@ -41,7 +42,7 @@ const AuthForm = () =>{
 
         //here will come the prisma connection with the mongo db 
         if(variant === 'REGISTER'){
-            //Axios registor
+            axios.post('/api/register',data);
         }
         if(variant === 'LOGIN'){
             //nextAuth signIN
