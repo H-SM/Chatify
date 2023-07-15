@@ -4,18 +4,24 @@ import Button from "@/app/components/Button";
 import  Input  from "@/app/components/inputs/input";
 import AuthSocialButton from './AuthSocialButton';
 import { BsGithub , BsGoogle } from 'react-icons/bs';
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FieldValues , useForm , SubmitHandler} from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 type Varient = 'LOGIN' | 'REGISTER';
-//client based structure compo rather than a server based, has buttons, fields, more like a react compo, rather then a static html maker for a bot
-// npm install react-icons react-hook-form clsx
 const AuthForm = () =>{
+    const session = useSession();
+    const router = useRouter();
     const [variant, setVariant]=useState<Varient>('LOGIN');
     const [isLoading, setIsLoading]=useState(false);
     
+    useEffect(() => {
+        if(session?.status === 'authenticated'){
+            router.push('/users');
+        }
+    }, [session?.status, router]);
     const toggleVarient = useCallback(() =>{
         if(variant === 'LOGIN'){
             setVariant("REGISTER");
@@ -45,6 +51,7 @@ const AuthForm = () =>{
         //here will come the prisma connection with the mongo db 
         if(variant === 'REGISTER'){
             axios.post('/api/register',data)
+            .then(() => signIn('credentials', data))
             .catch(()=> toast.error("Something went wrong!"))
             .finally(() => setIsLoading(false));
         }
@@ -76,6 +83,7 @@ const AuthForm = () =>{
 
             if(callback?.ok && !callback?.error){
                 toast.success("Logged In!");
+                router.push('/users');
             }
         })
         .finally(() => setIsLoading(false));
