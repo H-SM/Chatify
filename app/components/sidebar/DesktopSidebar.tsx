@@ -33,7 +33,6 @@ const DesktopSidebar : React.FC<DesktopSidebarProps>= ({
             lg:flex-col 
             justify-between
         ">
-            {/* 2:33:29 */}
              <nav className="mt-4 flex flex-col justify-between">
                 <ul
                     role="list"
