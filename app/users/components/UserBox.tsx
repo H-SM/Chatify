@@ -40,7 +40,6 @@ const UserBox: React.FC<UserBoxProps> = ({
                 cursor-pointer
             "
         >
-            {/* 3:14:28 */}
             <Avatar user={data}/>
             <div className="min-w-0 flex-1">
                 <div className="focus:outline-none">
