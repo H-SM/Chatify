@@ -67,7 +67,7 @@ export async function POST(
             }
         });
 
-        return NextResponse.json(newMessage);
+        return NextResponse.json(updateConversation);
 
     }catch(e: any){
         console.log(e, "ERROR_MESSAGE!")
