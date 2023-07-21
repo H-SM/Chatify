@@ -2,11 +2,12 @@
 
 import useOtherUser from "@/app/hooks/useOtherUser";
 import { Conversation, User } from "@prisma/client";
-import { Fragment, useMemo } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { format } from "date-fns";
 import { Transition , Dialog } from "@headlessui/react";
 import { IoClose, IoTrash, IoTrashBin } from "react-icons/io5";
 import Avatar from "@/app/components/Avatar";
+import ConfirmModal from "./ConfirmModal";
 interface ProfileDrawerProps {
     isOpen : boolean,
     onClose: () => void,
@@ -24,6 +25,8 @@ const ProfileDrawer : React.FC<ProfileDrawerProps>= ({
         return format(new Date(otherUser.createdAt),'PP');
     },[otherUser.createdAt]);
 
+    const [ConfirmOpen, setConfirmOpen]=useState(false);
+
     const title = useMemo(() => { 
         return data.name || otherUser.name;
     },[data.name, otherUser.name]);
@@ -37,6 +40,15 @@ const ProfileDrawer : React.FC<ProfileDrawerProps>= ({
 
 
     return (
+        <>
+        <ConfirmModal
+            isOpen={ConfirmOpen}
+            onClose={() => setConfirmOpen(false)}
+        >
+            <div className="bg-white p-5">
+                <p>Hello Model!</p>
+            </div>
+        </ConfirmModal>
         <Transition.Root show={isOpen} as={Fragment}>
             <Dialog as="div" className="relative z-50" onClose={onClose}>
             <Transition.Child 
@@ -135,7 +147,6 @@ const ProfileDrawer : React.FC<ProfileDrawerProps>= ({
                                                     my-8
                                                 ">
                                                     <div 
-                                                        onClick={() => {}}
                                                         className="
                                                             flex
                                                             flex-col
@@ -144,7 +155,7 @@ const ProfileDrawer : React.FC<ProfileDrawerProps>= ({
                                                             cursor-pointer
                                                             hover:opacity-75
                                                         "
-                                                    >
+                                                        onClick={() => setConfirmOpen(true)}>
                                                         <div className="
                                                             w-10
                                                             h-10
@@ -153,7 +164,8 @@ const ProfileDrawer : React.FC<ProfileDrawerProps>= ({
                                                             flex
                                                             items-center
                                                             justify-center
-                                                        ">
+                                                        "
+                                                        >
                                                             <IoTrashBin size={20}/>
                                                         </div>
                                                         <div className="text-sm font-semibold text-neutral-600">
@@ -231,6 +243,7 @@ const ProfileDrawer : React.FC<ProfileDrawerProps>= ({
             </div>
             </Dialog>
         </Transition.Root>
+        </>
     )
 }
 // npm install @headlessui/react
