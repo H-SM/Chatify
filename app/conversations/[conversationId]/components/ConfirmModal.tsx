@@ -1,5 +1,6 @@
 "use client";
 
+import Button from "@/app/components/Button";
 import Modal from "@/app/components/Modal";
 import useConversation from "@/app/hooks/useConversation";
 import { Dialog } from "@headlessui/react";
@@ -11,10 +12,12 @@ import { FiAlertTriangle } from "react-icons/fi";
 interface ConfirmModalProps { 
     isOpen?: boolean,
     onClose: () => void,
+    children: React.ReactNode,
 }
 const ConfirmModal : React.FC<ConfirmModalProps>= ({
     isOpen,
     onClose,
+    children,
 }) => {
     const router = useRouter();
     const { conversationId } = useConversation();
@@ -23,10 +26,10 @@ const ConfirmModal : React.FC<ConfirmModalProps>= ({
     const onDelete = useCallback(() => {
         setIsLoading(true);
 
-        axios.delete(`/api/conversatoins/${conversationId}`)
+        axios.delete(`/api/conversations/${conversationId}`)
         .then(()=> {
             onClose();
-            router.push('/conversatoins');
+            router.push('/conversations');
             router.refresh();
         })
         .catch(() => toast.error("Something went wrong!"))
@@ -85,7 +88,12 @@ const ConfirmModal : React.FC<ConfirmModalProps>= ({
             sm:mt-4
             sm:flex
             sm:flex-row-reverse">
-                
+                <Button disabled={isLoading} danger onClick={onDelete}>
+                    Delete
+                </Button>
+                <Button disabled={isLoading} secondary onClick={onClose}>
+                    Cancel
+                </Button>
             </div>
         </Modal>
     )
