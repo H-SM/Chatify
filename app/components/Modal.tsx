@@ -6,14 +6,14 @@ import { IoClose } from "react-icons/io5";
 
 interface ModelProps { 
     isOpen?: boolean,
-    onClose: () => void,
-    children: React.ReactNode,
+    onClose: () => void;
+    children: React.ReactNode;
 }
-const Modal: React.FC<ModelProps> =({
+const Modal :React.FC<ModelProps> = ({
     isOpen,
     onClose,
     children,
-}) =>{
+}) => {
     return(
         <Transition.Root
             show={isOpen} 
