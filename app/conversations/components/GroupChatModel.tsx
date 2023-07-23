@@ -78,7 +78,7 @@ const GroupChatModel : React.FC<GroupChatModelProps>= ({
                             text-sm
                             leading-6
                             text-gray-600">
-                                Create a chat with more than 2 people.
+                                Create a chat with more than 3 people.
                             </p>
                             <div className="
                             mt-10
