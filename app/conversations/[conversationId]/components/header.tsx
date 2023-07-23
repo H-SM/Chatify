@@ -1,5 +1,6 @@
 'use client';
 
+import AvatarGroup from "@/app/components/AvatarGroup";
 import Avatar from "@/app/components/Avatar";
 import useOtherUser from "@/app/hooks/useOtherUser";
 import { Conversation, User } from "@prisma/client";
@@ -65,7 +66,11 @@ const Header : React.FC<HeaderProps>= ({
                 href="/conversations">
                     <HiChevronLeft size={32}/>
                 </Link>
-                <Avatar user={otherUser}/>
+                {conversation.isGroup ? ( 
+                    <AvatarGroup users={conversation.users}/>
+                ):(
+                    <Avatar user={otherUser}/>
+                )}
                 <div className="flex flex-col">
                     <div className="text-lg font-semibold">
                         {conversation.name || otherUser.name}
