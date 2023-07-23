@@ -7,19 +7,30 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ConversationBox from "./ConversationBox";
 import { MdOutlineGroupAdd } from 'react-icons/md';
+import GroupChatModel from "./GroupChatModel";
+import { User } from "@prisma/client";
 interface ConversationListProps {
-    initialItems : FullConversationType[]
+    initialItems : FullConversationType[],
+    users: User[]
 }
 
 const ConversationList :React.FC<ConversationListProps>= ({
-    initialItems
+    initialItems,
+    users
 }) => {
     const [items , setItems] = useState(initialItems);
+    const [isModelOpen, SetIsModelOpen] = useState(false);
+
     const router = useRouter();
 
     const { conversationId, isOpen } = useConversation();
 
     return (
+        <>
+        <GroupChatModel
+            isOpen={isModelOpen}
+            onClose={() => SetIsModelOpen(false)}
+            users={users}/> 
         <aside
         className={clsx(`
             fixed
@@ -48,7 +59,8 @@ const ConversationList :React.FC<ConversationListProps>= ({
                         cursor-pointer
                         hover:opactiy-75
                         transition
-                    ">
+                    "
+                    onClick={() => SetIsModelOpen(true)}>
                         <MdOutlineGroupAdd size={20}/>
                     </div>
                 </div>
@@ -61,6 +73,7 @@ const ConversationList :React.FC<ConversationListProps>= ({
                 ))}
             </div>
         </aside>
+        </>
     )
 }
 export default ConversationList;
