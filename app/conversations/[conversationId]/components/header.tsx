@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { HiChevronLeft, HiEllipsisHorizontal } from "react-icons/hi2";
 import ProfileDrawer from "./ProfileDrawer";
+import useActiveList from "@/app/hooks/useActiveList";
 
 interface HeaderProps {
     conversation: Conversation & {
@@ -21,13 +22,16 @@ const Header : React.FC<HeaderProps>= ({
 
     const [drawer ,setDrawer]= useState(false);
 
+    const { members } = useActiveList();
+    const isActive = members.indexOf(otherUser?.email!) !== -1;
+
     const statusText = useMemo(() => { 
         if(conversation.isGroup){
             return `${conversation.users.length} members`;
         }
 
-        return "Active"; //hardcoded for nows
-    },[conversation]);
+        return isActive ? "Online" : "Offline"; 
+    },[conversation, isActive]);
 
 
     return ( 
