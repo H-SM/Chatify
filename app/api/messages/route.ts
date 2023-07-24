@@ -69,7 +69,7 @@ export async function POST(
         });
 
         // PUSHER OF CONERSATION & MESSAGE ON THE SERVER
-        await pusherServer.trigger(conversationId, 'messages:new', newMessage); // key, value pair at the trigger point (the channel over the radio on the application)
+        await pusherServer.trigger(conversationId, 'messages:new', newMessage);
 
         const lastMessage = updateConversation.messages[updateConversation.messages.length - 1];
 
@@ -87,5 +87,3 @@ export async function POST(
         return new NextResponse('Internal Error', { status : 500})
     }
 }
-
-// npm install next-cloudinary

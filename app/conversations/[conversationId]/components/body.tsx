@@ -27,14 +27,11 @@ const Body : React.FC<bodyProps>= ({
         pusherClient.subscribe(conversationId); //listen to conversationId channel 
         bottomRef?.current?.scrollIntoView();
 
-        // PUSHER OVER THE CLIENT SIDE & followed by the function abt what to do over finding such a connection aka a new message in the conversation
-        const messageHandler = (message: FullMessageType) => {
-            // npm install lodash -> to simplify a few comparisons 
-            // npm install -D @types/lodash 
+        const messageHandler = (message: FullMessageType) => { 
             axios.post(`/api/conversations/${conversationId}/seen`);
 
             setMessages((current) => {
-                //is there a message of the id with that message (prevents falsy multiuploads)
+            
                 if(find(current, { id: message.id})){
                     return current;
                 }
@@ -43,12 +40,25 @@ const Body : React.FC<bodyProps>= ({
 
             bottomRef?.current?.scrollIntoView();
         }
+
+        //UPDATE THE SEEN FOR THE MESSAGE REAL TIME
+        const updateMessageHandler = (newMessage: FullMessageType) => { 
+            setMessages((current) => current.map((currentMessage) => {
+                if(currentMessage.id === newMessage.id) { 
+                    return newMessage;
+                }
+                return currentMessage; 
+            }))
+        }
+
         pusherClient.bind('messages:new', messageHandler);
+        pusherClient.bind('messages:update', updateMessageHandler);
 
         //unbound or unbid the client connection
         return ()  => { 
             pusherClient.unsubscribe(conversationId);
             pusherClient.unbind('messages:new', messageHandler);
+            pusherClient.unbind('messages:update', updateMessageHandler);
         }
     },[conversationId])
     return ( 
