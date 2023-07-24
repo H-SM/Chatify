@@ -2,6 +2,7 @@ import getCurrentUser from "@/app/actions/getCurrentUser";
 import { NextResponse } from "next/server";
 
 import prisma from "@/app/libs/prismadb";
+import { pusherServer } from "@/app/libs/pusher";
 
 export async function POST(
   request: Request,
@@ -41,13 +42,21 @@ export async function POST(
           }
         },
         include: {
-          users: true,//populates the users when we fetch the conversation
+          users: true,
         }
       });
+
+      //live new conversation
+      newConversation.users.forEach((user) => {
+        if (user.email) {
+          pusherServer.trigger(user.email, 'conversation:new', newConversation);
+        }
+      });
+
       return NextResponse.json(newConversation);
     }
 
-    //single chat logic below -> userId => trying to start a conversation with this user
+    //single chat logic below 
     const existingConversations = await prisma.conversation.findMany({
       where: {
         OR: [
@@ -87,6 +96,12 @@ export async function POST(
       },
       include: {
         users: true
+      }
+    });
+
+    newConversation.users.map((user) => {
+      if (user.email) {
+        pusherServer.trigger(user.email, 'conversation:new', newConversation);
       }
     });
 
