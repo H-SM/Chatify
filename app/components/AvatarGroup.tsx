@@ -32,7 +32,7 @@ const Avatar : React.FC<AvatarGProps>= ( {
                 h-[21px]
                 w-[21px]
                 ${positionMap[index as keyof typeof positionMap]}`}>
-                    <Image alt="avatar" src={user?.image || '/images/placeholder.gif'} fill/>
+                    <Image alt="avatar" src={user?.image || '/images/placeholder.gif'} fill sizes="(max-width: 640px) 100vw, 640px"/>
                 </div>
             ))}
             
